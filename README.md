@@ -1,40 +1,59 @@
 # Logitech F710 ROS joy teleop
 
-Dockerized ROS node allowing to control robot with Logitech F710 gamepad. More details on ROS node itself and applied velocities in modes can be found in it's [README](./logitech_f710_ros/README.md).
+Fork from [logitech_f710_ros](https://github.com/husarion/logitech_f710_ros). This package is used to control LOLA platform in teleoperation mode.
+
+# Installation
+
+Clone this repo inside your catkin workspace (usually in our convention, lola_navigation_ws):
+
+```shell
+cd ~/lola_navigation_ws/src
+git clone git@github.com:gramuah/logitech_f710_ros.git
+```
+
+Then go back again to the workspace root and execute a catkin_make:
+
+```shell
+cd ..
+catkin_make
+
+# Activate the environment
+source devel/setup.bash
+```
 
 ## Setup joy
 
-Connect joy via nano USB receiver and make sure it is in **DirectInput Mode** (switch in front o the pad with letters **D** and **X**, select **D**).
+Connect joy via nano USB receiver and make sure it is in **XInput Mode** (switch in front o the pad with letters **D** and **X**, select **X**).
 
 To test if joy works use `jstest /dev/input/js0`.
 If the output is:
         
         jstest: No such file or directory
 
-See `ls /dev/input | grep js` and find your joy number. If it differs apply changes in *docker-compose.yaml* and launch file.
+See `ls /dev/input | grep js` and find your joy number.
+
+## Run the node
+
+To run the node with roslaunch, execute the following command:
+
+```shell
+# If environment is not active, run: source ~/lola_navigation_ws/devel/setup.bash
+roslaunch logitech_f710_joy_ros joy_teleop.launch
+```
 
 ## Button mapping
 
-|  Button  |      Function      |
-|:--------:|:------------------:|
-|   `LB`   |   enable driving   |
-|   `RB`   | slow driving mode  |
-|   `RT`   |  fast driving mode |
+|  Button  |              Function              |
+|:--------:|:----------------------------------:|
+|   `LB`   |           enable driving           |
+|   `RB`   |         slow driving mode          |
+|   `RT`   | fast driving mode (**not active**) |
 
 If neither `RB` nor `RT` are pressed robot operates in *normal* driving mode.
 
 To drive robot use sticks.
 
-By default linear `X` and `Y` are held by right stick. Angular `Z` is controlled with left stick.
-
-## Examples
-
-You can run examples with following commands:
-
-``` bash
-cd examples/panther_f710
-docker-compose up
-```
+By default angular `Z` is controlled with left stick left/right direction and linear `X` by up/down direction.
 
 ---
 # ROS node API
